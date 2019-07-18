@@ -13,7 +13,7 @@ You can run the project by using the following command:
 
 If you want to change some of the parameters you can use:
 
-`mlflow run git@github.com:jodahr/mlflow-titanic.git {training_data_uri} [--rstate rstate] [--n_iter n_iter]`
+`mlflow run git@github.com:jodahr/mlflow-titanic.git {training_data_uri} -P [rstate=rstate] -P [n_iter=n_iter]`
 
 You can also add the run to a specific experiment:
 
@@ -29,3 +29,5 @@ After the run is done you can investigate the results by using
 
 in the folder of the project or where you issued the above commands.
 
+If you need to keep different versions of you data use s3 versioning! This should lead to a different s3 uri
+and will be recognized by mlflow.
