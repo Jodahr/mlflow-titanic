@@ -19,16 +19,19 @@ import mlflow.sklearn
 def read_data(training_data):
     return pd.read_csv(training_data, sep='\t')
 
+
 def parse_cl_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("training_data", type=str,
                         help="Path to training data csv file.")
     parser.add_argument("--n_iter", type=int,
-                        help="Number of iterations (defaults to 10).", default=10)
+                        help="Number of iterations (defaults to 10).",
+                        default=10)
     parser.add_argument("--rstate", type=int,
                         help="Random seed", default=42)
     args = parser.parse_args()
     return args
+
 
 def setup_model():
     mapper = DataFrameMapper([
@@ -37,19 +40,20 @@ def setup_model():
     ], df_out=True)
 
     pipe = Pipeline([
-    ('prep', mapper),
-    ('model', SVC(gamma='scale'))
+        ('prep', mapper),
+        ('model', SVC(gamma='scale'))
     ])
 
     return pipe
+
 
 def setup_space():
 
     # Set the parameters by cross-validation
     return {'model__C': scipy.stats.expon(scale=100),
-    'model__gamma': scipy.stats.expon(scale=.1),
-    'model__kernel': ['rbf', 'linear'], 'model__class_weight':['balanced', None]}
-
+            'model__gamma': scipy.stats.expon(scale=.1),
+            'model__kernel': ['rbf', 'linear'],
+            'model__class_weight': ['balanced', None]}
 
 
 if __name__ == "__main__":
@@ -73,8 +77,9 @@ if __name__ == "__main__":
     param_dist = setup_space()
     n_iter_search = args.n_iter
     random_search = RandomizedSearchCV(clf, param_distributions=param_dist,
-                                    n_iter=n_iter_search, cv=5, iid=False,
-                                    random_state=args.rstate, return_train_score=True)
+                                       n_iter=n_iter_search, cv=5, iid=False,
+                                       random_state=args.rstate,
+                                       return_train_score=True)
 
     with mlflow.start_run() as run:
         experiment_id = run.info.experiment_id
@@ -94,25 +99,25 @@ if __name__ == "__main__":
             'param_model__class_weight'
         ]]
 
-        best_run = df_cv.loc[df_cv['mean_test_score'].idxmax,:]
+        best_run = df_cv.loc[df_cv['mean_test_score'].idxmax, :]
 
         # log params of best run
         mlflow.log_metric(key='mean_acc',
-                                   value=best_run['mean_test_score'])
+                          value=best_run['mean_test_score'])
         mlflow.log_metric(key='std_acc',
-                                   value=best_run['std_test_score'])
+                          value=best_run['std_test_score'])
         mlflow.log_param(key='C',
-                                   value=best_run['param_model__C'])
+                         value=best_run['param_model__C'])
         mlflow.log_param(key='gamma',
-                                   value=best_run['param_model__gamma'])
+                         value=best_run['param_model__gamma'])
         mlflow.log_param(key='kernel',
-                                   value=best_run['param_model__kernel'])
+                         value=best_run['param_model__kernel'])
         mlflow.log_param(key='class_weight',
-                                   value=best_run['param_model__class_weight'])
+                         value=best_run['param_model__class_weight'])
         mlflow.log_param(key='n_iters',
-                                   value=args.n_iter)
+                         value=args.n_iter)
         mlflow.log_param(key='random_state',
-                                   value=args.rstate)
+                         value=args.rstate)
 
         # log best model
         mlflow.sklearn.log_model(random_search, 'svc')
