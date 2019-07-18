@@ -1,0 +1,14 @@
+name: ml-utils
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.7.0=h6e4f718_3
+  - pip=18.1=py37_0
+  - s3fs=0.3.0=py_0
+  - scikit-learn=0.20.1=py37h4989274_0
+  - scipy=1.1.0=py37hfa4b5c9_1
+  - pip:
+    - mlflow==1.0.0
+    - sklearn-pandas==1.8.0
+

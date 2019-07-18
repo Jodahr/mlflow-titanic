@@ -1,0 +1,9 @@
+name: RandomSearch
+
+entry_points:
+    main:
+        parameters:
+            training_data: {type: string, default: 's3://jodahr-mlflow/data/titanic.csv'}
+            rstate: {type: int, default: 42}
+            n_iter: {type: int, default: 10}
+        command: "python main.py {training_data} --n_iter {n_iter} --rstate {rstate}"
