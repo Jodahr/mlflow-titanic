@@ -31,3 +31,6 @@ in the folder of the project or where you issued the above commands.
 
 If you need to keep different versions of you data use s3 versioning! This should lead to a different s3 uri
 and will be recognized by mlflow.
+
+You can also add several runs in a for loop
+`for i in `seq 1 10`; do mlflow run -e main --experiment-id 1 git@github.com:jodahr/mlflow-titanic.git -P rstate=10 -P n_iter=50; done`
