@@ -8,6 +8,7 @@ dependencies:
   - s3fs=0.3.0=py_0
   - scikit-learn=0.20.1=py37h4989274_0
   - scipy=1.1.0=py37hfa4b5c9_1
+  - pandas=0.23.4=py37h04863e7_0
   - pip:
     - mlflow==1.0.0
     - sklearn-pandas==1.8.0
